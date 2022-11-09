@@ -1,8 +1,8 @@
-package algorithms
+package bubblesort
 
 import "golang.org/x/exp/constraints"
 
-func BubbleSort[T constraints.Ordered](items []T) {
+func Sort[T constraints.Ordered](items []T) {
 	sorted := false
 
 	for !sorted {
