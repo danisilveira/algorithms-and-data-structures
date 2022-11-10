@@ -3,7 +3,7 @@ package insertionsort_test
 import (
 	"testing"
 
-	"github.com/danisilveira/algorithms-and-data-structures/algorithms/insertionsort"
+	"github.com/danisilveira/algorithms-and-data-structures/algorithms/sorting/insertionsort"
 	"github.com/stretchr/testify/assert"
 )
 

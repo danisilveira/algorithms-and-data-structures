@@ -3,7 +3,7 @@ package bubblesort_test
 import (
 	"testing"
 
-	"github.com/danisilveira/algorithms-and-data-structures/algorithms/bubblesort"
+	"github.com/danisilveira/algorithms-and-data-structures/algorithms/sorting/bubblesort"
 	"github.com/stretchr/testify/assert"
 )
 

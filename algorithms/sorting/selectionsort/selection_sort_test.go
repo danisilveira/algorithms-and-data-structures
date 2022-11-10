@@ -3,7 +3,7 @@ package selectionsort_test
 import (
 	"testing"
 
-	"github.com/danisilveira/algorithms-and-data-structures/algorithms/selectionsort"
+	"github.com/danisilveira/algorithms-and-data-structures/algorithms/sorting/selectionsort"
 	"github.com/stretchr/testify/assert"
 )
 
