@@ -7,11 +7,7 @@ func Sort[T constraints.Ordered](items []T) {
 		tempValue := items[i]
 		position := i - 1
 
-		for position >= 0 {
-			if items[position] <= tempValue {
-				break
-			}
-
+		for position >= 0 && items[position] > tempValue {
 			items[position+1] = items[position]
 			position--
 		}
