@@ -9,14 +9,20 @@ import (
 
 func TestStack(t *testing.T) {
 	stack := stack.New[int](5)
+	assert.True(t, stack.Empty())
+	assert.Equal(t, 0, stack.Length())
+	assert.Equal(t, 5, stack.Capacity())
 
 	assert.Nil(t, stack.Push(1))
+	assert.Equal(t, 1, stack.Length())
 	one, err := stack.Pop()
 	assert.Equal(t, 1, one)
 	assert.Nil(t, err)
+	assert.Equal(t, 0, stack.Length())
 
 	assert.Nil(t, stack.Push(2))
 	assert.Nil(t, stack.Push(3))
+	assert.Equal(t, 2, stack.Length())
 
 	three, err := stack.Pop()
 	assert.Equal(t, 3, three)
@@ -27,6 +33,7 @@ func TestStack(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.True(t, stack.Empty())
+	assert.Equal(t, 0, stack.Length())
 }
 
 func TestStack_ShouldReturnAnErrorWhenAnItemIsPushedIntoAFullStack(t *testing.T) {
