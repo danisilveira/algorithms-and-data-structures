@@ -55,7 +55,7 @@ func (s *stack[T]) Pop() (T, error) {
 }
 
 func (s *stack[T]) Top() T {
-	return s.items[s.top]
+	return s.items[s.top-1]
 }
 
 func (s *stack[T]) Length() int {
