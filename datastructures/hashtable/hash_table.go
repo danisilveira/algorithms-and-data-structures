@@ -6,7 +6,10 @@ import (
 )
 
 type Key interface {
-	~string
+	int | int8 | int16 | int32 | int64 |
+		uint | uint8 | uint16 | uint32 | uint64 |
+		float32 | float64 |
+		string | bool
 }
 
 type HashGeneratorFunc[K Key] func(key K) int64
@@ -97,7 +100,41 @@ func (h *HashTable[K, V]) Set(key K, value V) {
 }
 
 func defaultHashGeneratorFunc[K Key](key K) int64 {
-	hash := fnv.New32a()
-	hash.Write([]byte(key))
-	return int64(hash.Sum32())
+	switch k := any(key).(type) {
+	case string:
+		hash := fnv.New32a()
+		hash.Write([]byte(k))
+		return int64(hash.Sum32())
+	case int:
+		return int64(k)
+	case int8:
+		return int64(k)
+	case int16:
+		return int64(k)
+	case int32:
+		return int64(k)
+	case int64:
+		return k
+	case uint:
+		return int64(k)
+	case uint8:
+		return int64(k)
+	case uint16:
+		return int64(k)
+	case uint32:
+		return int64(k)
+	case uint64:
+		return int64(k)
+	case float32:
+		return int64(k)
+	case float64:
+		return int64(k)
+	case bool:
+		if !k {
+			return 0
+		}
+		return 1
+	default:
+		panic("something went wrong!")
+	}
 }
