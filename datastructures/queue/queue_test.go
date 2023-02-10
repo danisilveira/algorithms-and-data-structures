@@ -60,6 +60,9 @@ func TestQueue_ShouldBeAbleToIncreaseItsCapacity(t *testing.T) {
 	q.Enqueue('b')
 	assert.False(t, q.Full())
 
+	assert.Equal(t, 2, q.Length())
+	assert.Equal(t, 5, q.Capacity())
+
 	a, err := q.Peek()
 	assert.Equal(t, 'a', a)
 	assert.Nil(t, err)
