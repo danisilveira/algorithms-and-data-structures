@@ -8,58 +8,73 @@ import (
 )
 
 func TestQueue(t *testing.T) {
-	queue := queue.New[int](3)
-	assert.True(t, queue.Empty())
-	assert.Equal(t, 0, queue.Length())
-	assert.Equal(t, 3, queue.Capacity())
+	q := queue.MustNew(queue.WithCapacity[int](3))
+	assert.True(t, q.Empty())
+	assert.Equal(t, 0, q.Length())
+	assert.Equal(t, 3, q.Capacity())
 
-	assert.Nil(t, queue.Enqueue(1))
-	assert.Equal(t, 1, queue.Length())
-	assert.False(t, queue.Empty())
+	q.Enqueue(1)
+	assert.Equal(t, 1, q.Length())
+	assert.False(t, q.Empty())
 
-	one, err := queue.Dequeue()
+	one, err := q.Dequeue()
 	assert.Equal(t, 1, one)
 	assert.Nil(t, err)
-	assert.Equal(t, 0, queue.Length())
+	assert.Equal(t, 0, q.Length())
 
-	assert.Nil(t, queue.Enqueue(2))
-	assert.Nil(t, queue.Enqueue(3))
-	assert.Nil(t, queue.Enqueue(4))
+	assert.False(t, q.IsSynchronized())
+	q = q.Synchronized()
+	assert.True(t, q.IsSynchronized())
 
-	assert.True(t, queue.Full())
-	assert.Equal(t, 3, queue.Length())
+	q.Enqueue(2)
+	q.Enqueue(3)
+	q.Enqueue(4)
 
-	two, err := queue.Dequeue()
+	assert.True(t, q.Full())
+	assert.Equal(t, 3, q.Length())
+
+	two, err := q.Dequeue()
 	assert.Equal(t, 2, two)
 	assert.Nil(t, err)
 
-	three, err := queue.Dequeue()
+	three, err := q.Dequeue()
 	assert.Equal(t, 3, three)
 	assert.Nil(t, err)
 
-	four, err := queue.Dequeue()
+	four, err := q.Dequeue()
 	assert.Equal(t, 4, four)
 	assert.Nil(t, err)
 
-	assert.True(t, queue.Empty())
-	assert.Equal(t, 0, queue.Length())
+	assert.True(t, q.Empty())
+	assert.Equal(t, 0, q.Length())
 }
 
-func TestQueue_ShouldReturnAnErrorWhenAnItemIsEnqueueIntoAFullQueue(t *testing.T) {
-	q := queue.New[rune](1)
+func TestQueue_ShouldBeAbleToIncreaseItsCapacity(t *testing.T) {
+	q := queue.MustNew(
+		queue.WithCapacity[rune](1),
+	)
 	assert.True(t, q.Empty())
 
-	assert.Nil(t, q.Enqueue('a'))
-
+	q.Enqueue('a')
 	assert.True(t, q.Full())
+	q.Enqueue('b')
+	assert.False(t, q.Full())
 
-	err := q.Enqueue('b')
-	assert.Error(t, err)
-	assert.ErrorIs(t, err, queue.ErrQueueIsFull)
+	a, err := q.Peek()
+	assert.Equal(t, 'a', a)
+	assert.Nil(t, err)
+
+	a, err = q.Dequeue()
+	assert.Equal(t, 'a', a)
+	assert.Nil(t, err)
+
+	b, err := q.Dequeue()
+	assert.Equal(t, 'b', b)
+	assert.Nil(t, err)
 }
 
-func TestQueue_ShouldReturnAnErrorWhenAnItemIsDequeueFromAnEmptyQueue(t *testing.T) {
-	q := queue.New[string](1)
+func TestQueue_ShouldReturnAnErrorWhenAnItemIsDequeuedFromAnEmptyQueue(t *testing.T) {
+	q := queue.MustNew[string]()
 	assert.True(t, q.Empty())
 
 	_, err := q.Dequeue()
