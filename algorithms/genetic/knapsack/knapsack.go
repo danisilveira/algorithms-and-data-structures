@@ -1,9 +1,14 @@
 package knapsack
 
-import "fmt"
+import (
+	"github.com/danisilveira/algorithms-and-data-structures/algorithms/genetic/knapsack/internal"
+	"github.com/danisilveira/algorithms-and-data-structures/algorithms/genetic/knapsack/internal/geneticalgorithm"
+)
 
 type Knapsack struct {
 	MaxWeight float64
+
+	Items []Item
 }
 
 func New(maxWeight float64) Knapsack {
@@ -13,21 +18,42 @@ func New(maxWeight float64) Knapsack {
 }
 
 func (k *Knapsack) SelectAndPutInside(items []Item) {
-	config := config{
-		knapsack: k,
-		items:    items,
-
-		populationSize:  20,
-		maxGenerations:  100,
-		fitnessComparer: newValueAndWeightAndItemsCountComparer(),
+	internalItems := make([]internal.Item, len(items))
+	for i, item := range items {
+		internalItems[i] = internal.Item{
+			Value:  item.Value,
+			Weight: item.Weight,
+		}
 	}
 
-	population := newPopulationWithRandomIndividuals(config)
-	individual := population.GetBestIndividual()
-	fmt.Printf("The best individual is: %s\n\n", individual)
+	geneticAlgorithm := geneticalgorithm.NewWithOptions(
+		geneticalgorithm.WithPopulationSize(200),
+		geneticalgorithm.WithMaxGenerations(1000),
+	)
+	indexes := geneticAlgorithm.Run(k.MaxWeight, internalItems)
 
-	population.Print()
-	// for i := 0; i < config.maxGenerations; i++ {
-	// 	population = population.Evolve()
-	// }
+	itemsToPutInside := make([]Item, 0, len(indexes))
+	for _, index := range indexes {
+		itemsToPutInside = append(itemsToPutInside, items[index])
+	}
+
+	k.Items = itemsToPutInside
+}
+
+func (k *Knapsack) TotalValue() float64 {
+	totalValue := 0.0
+	for _, item := range k.Items {
+		totalValue += item.Value
+	}
+
+	return totalValue
+}
+
+func (k *Knapsack) TotalWeight() float64 {
+	totalWeight := 0.0
+	for _, item := range k.Items {
+		totalWeight += item.Weight
+	}
+
+	return totalWeight
 }
