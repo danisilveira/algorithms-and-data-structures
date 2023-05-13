@@ -12,8 +12,8 @@ type Stack[T any] interface {
 	Push(T) error
 	Pop() (T, error)
 	Peek() (T, error)
-	Length() int
-	Capacity() int
+	Len() int
+	Cap() int
 	Full() bool
 	Empty() bool
 	Synchronized() Stack[T]
@@ -104,11 +104,11 @@ func (s *stack[T]) Peek() (T, error) {
 	return s.items[s.length-1], nil
 }
 
-func (s *stack[T]) Length() int {
+func (s *stack[T]) Len() int {
 	return s.length
 }
 
-func (s *stack[T]) Capacity() int {
+func (s *stack[T]) Cap() int {
 	return s.capacity
 }
 

@@ -10,17 +10,17 @@ import (
 func TestQueue(t *testing.T) {
 	q := queue.MustNew(queue.WithCapacity[int](3))
 	assert.True(t, q.Empty())
-	assert.Equal(t, 0, q.Length())
-	assert.Equal(t, 3, q.Capacity())
+	assert.Equal(t, 0, q.Len())
+	assert.Equal(t, 3, q.Cap())
 
 	q.Enqueue(1)
-	assert.Equal(t, 1, q.Length())
+	assert.Equal(t, 1, q.Len())
 	assert.False(t, q.Empty())
 
 	one, err := q.Dequeue()
 	assert.Equal(t, 1, one)
 	assert.Nil(t, err)
-	assert.Equal(t, 0, q.Length())
+	assert.Equal(t, 0, q.Len())
 
 	assert.False(t, q.IsSynchronized())
 	q = q.Synchronized()
@@ -31,7 +31,7 @@ func TestQueue(t *testing.T) {
 	q.Enqueue(4)
 
 	assert.True(t, q.Full())
-	assert.Equal(t, 3, q.Length())
+	assert.Equal(t, 3, q.Len())
 
 	two, err := q.Dequeue()
 	assert.Equal(t, 2, two)
@@ -46,7 +46,7 @@ func TestQueue(t *testing.T) {
 	assert.Nil(t, err)
 
 	assert.True(t, q.Empty())
-	assert.Equal(t, 0, q.Length())
+	assert.Equal(t, 0, q.Len())
 }
 
 func TestQueue_ShouldBeAbleToIncreaseItsCapacity(t *testing.T) {
@@ -60,8 +60,8 @@ func TestQueue_ShouldBeAbleToIncreaseItsCapacity(t *testing.T) {
 	q.Enqueue('b')
 	assert.False(t, q.Full())
 
-	assert.Equal(t, 2, q.Length())
-	assert.Equal(t, 5, q.Capacity())
+	assert.Equal(t, 2, q.Len())
+	assert.Equal(t, 5, q.Cap())
 
 	a, err := q.Peek()
 	assert.Equal(t, 'a', a)

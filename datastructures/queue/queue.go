@@ -14,8 +14,8 @@ type Queue[T any] interface {
 	Enqueue(value T)
 	Dequeue() (T, error)
 	Peek() (T, error)
-	Length() int
-	Capacity() int
+	Len() int
+	Cap() int
 	Empty() bool
 	Full() bool
 	IsSynchronized() bool
@@ -106,11 +106,11 @@ func (q *queue[T]) Peek() (T, error) {
 	return q.items[q.head], nil
 }
 
-func (q *queue[T]) Length() int {
+func (q *queue[T]) Len() int {
 	return q.length
 }
 
-func (q *queue[T]) Capacity() int {
+func (q *queue[T]) Cap() int {
 	return q.capacity
 }
 

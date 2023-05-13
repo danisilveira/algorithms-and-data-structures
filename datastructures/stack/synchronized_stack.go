@@ -35,18 +35,18 @@ func (s *synchronized[T]) Peek() (T, error) {
 	return s.stack.Peek()
 }
 
-func (s *synchronized[T]) Length() int {
+func (s *synchronized[T]) Len() int {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
-	return s.stack.Length()
+	return s.stack.Len()
 }
 
-func (s *synchronized[T]) Capacity() int {
+func (s *synchronized[T]) Cap() int {
 	s.mu.RLock()
 	defer s.mu.RUnlock()
 
-	return s.stack.Capacity()
+	return s.stack.Cap()
 }
 
 func (s *synchronized[T]) Full() bool {
