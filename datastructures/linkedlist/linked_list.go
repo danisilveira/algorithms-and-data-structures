@@ -43,6 +43,8 @@ type LinkedList[T comparable] interface {
 	FrontNode() *Node[T]
 	BackNode() *Node[T]
 
+	Len() int
+
 	String() string
 }
 
@@ -243,7 +245,7 @@ func (ll *linkedList[T]) FindLast(value T) (*Node[T], error) {
 		node = node.Prev
 	}
 
-	return nil, nil
+	return nil, ErrNodeNotFound
 }
 
 func (ll *linkedList[T]) RemoveValue(value T) error {
@@ -298,6 +300,10 @@ func (ll *linkedList[T]) BackNode() *Node[T] {
 
 func (ll *linkedList[T]) Empty() bool {
 	return ll.length == 0
+}
+
+func (ll *linkedList[T]) Len() int {
+	return ll.length
 }
 
 func (ll linkedList[T]) String() string {
