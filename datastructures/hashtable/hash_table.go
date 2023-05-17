@@ -99,6 +99,45 @@ func (h *HashTable[K, V]) Set(key K, value V) {
 	element.next = newItem
 }
 
+func (h *HashTable[K, V]) Delete(key K) {
+	h.mu.Lock()
+	defer h.mu.Unlock()
+
+	hash := h.hashGenerator(key) % h.capacity
+
+	element := h.items[hash]
+	if element == nil {
+		return
+	}
+
+	if element.next == nil {
+		h.items[hash] = &item[K, V]{}
+		return
+	}
+
+	if key == element.key {
+		h.items[hash] = element.next
+		return
+	}
+
+	previousElement := element
+	currentElement := element.next
+	for currentElement != nil {
+		if key == currentElement.key {
+			break
+		}
+
+		previousElement = currentElement
+		currentElement = currentElement.next
+	}
+
+	if currentElement == nil {
+		return
+	}
+
+	previousElement.next = currentElement.next
+}
+
 func defaultHashGeneratorFunc[K Key](key K) int64 {
 	switch k := any(key).(type) {
 	case string:
