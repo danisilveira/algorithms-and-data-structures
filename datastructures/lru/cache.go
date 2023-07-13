@@ -16,12 +16,12 @@ type entry[K hashtable.Key, V comparable] struct {
 }
 
 type cache[K hashtable.Key, V comparable] struct {
-	capacity     int64
+	capacity     uint64
 	storage      *hashtable.HashTable[K, *linkedlist.Node[entry[K, V]]]
 	evictionList linkedlist.LinkedList[entry[K, V]]
 }
 
-func NewCache[K hashtable.Key, V comparable](capacity int64) Cache[K, V] {
+func NewCache[K hashtable.Key, V comparable](capacity uint64) Cache[K, V] {
 	return &cache[K, V]{
 		capacity:     capacity,
 		storage:      hashtable.New[K, *linkedlist.Node[entry[K, V]]](capacity),
