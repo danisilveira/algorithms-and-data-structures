@@ -17,7 +17,7 @@ func TestHashTable(t *testing.T) {
 }
 
 func TestHashTable_ShouldBeAbleToDealWithCollisionsCorrectly(t *testing.T) {
-	hashGeneratorFunc := func(key string) int64 {
+	hashGeneratorFunc := func(key string) uint64 {
 		return 1
 	}
 
@@ -53,7 +53,7 @@ func TestHashTable_ShouldOverrideValueWithTheSameKey(t *testing.T) {
 }
 
 func TestHashTable_ShouldOverrideValueWithTheSameKeyEvenWithACollision(t *testing.T) {
-	hashGeneratorFunc := func(key string) int64 {
+	hashGeneratorFunc := func(key string) uint64 {
 		return 1
 	}
 
@@ -108,7 +108,7 @@ func TestHashTable_ShouldDeleteAnItemCorrectly(t *testing.T) {
 }
 
 func TestHashTable_ShouldDeleteAnItemCorrectlyEvenWithACollision(t *testing.T) {
-	hashGeneratorFunc := func(key string) int64 {
+	hashGeneratorFunc := func(key string) uint64 {
 		return 1
 	}
 
@@ -134,7 +134,7 @@ func TestHashTable_ShouldDeleteAnItemCorrectlyEvenWithACollision(t *testing.T) {
 }
 
 func TestHashTable_ShouldDeleteAnItemCorrectlyEvenWithALotOfCollisions(t *testing.T) {
-	hashGeneratorFunc := func(key string) int64 {
+	hashGeneratorFunc := func(key string) uint64 {
 		return 1
 	}
 
