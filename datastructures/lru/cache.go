@@ -5,23 +5,23 @@ import (
 	"github.com/danisilveira/algorithms-and-data-structures/datastructures/linkedlist"
 )
 
-type Cache[K hashtable.Key, V comparable] interface {
+type Cache[K comparable, V any] interface {
 	Get(key K) (V, bool)
 	Set(key K, value V) bool
 }
 
-type entry[K hashtable.Key, V comparable] struct {
+type entry[K comparable, V any] struct {
 	key   K
 	value V
 }
 
-type cache[K hashtable.Key, V comparable] struct {
+type cache[K comparable, V any] struct {
 	capacity     uint64
 	storage      *hashtable.HashTable[K, *linkedlist.Node[entry[K, V]]]
 	evictionList linkedlist.LinkedList[entry[K, V]]
 }
 
-func NewCache[K hashtable.Key, V comparable](capacity uint64) Cache[K, V] {
+func NewCache[K comparable, V any](capacity uint64) Cache[K, V] {
 	return &cache[K, V]{
 		capacity:     capacity,
 		storage:      hashtable.New[K, *linkedlist.Node[entry[K, V]]](capacity),

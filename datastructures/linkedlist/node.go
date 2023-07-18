@@ -1,6 +1,6 @@
 package linkedlist
 
-type Node[T comparable] struct {
+type Node[T any] struct {
 	Next  *Node[T]
 	Prev  *Node[T]
 	Value T
@@ -8,7 +8,7 @@ type Node[T comparable] struct {
 	list LinkedList[T]
 }
 
-func NewNode[T comparable](value T) *Node[T] {
+func NewNode[T any](value T) *Node[T] {
 	return &Node[T]{
 		Value: value,
 	}

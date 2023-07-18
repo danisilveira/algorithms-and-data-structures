@@ -13,7 +13,7 @@ var (
 	ErrLinkedListIsEmpty              = errors.New("linked list is empty")
 )
 
-type LinkedList[T comparable] interface {
+type LinkedList[T any] interface {
 	AddValueFirst(value T) *Node[T]
 	AddNodeFirst(newNode *Node[T]) error
 
@@ -29,10 +29,6 @@ type LinkedList[T comparable] interface {
 	MoveToFront(node *Node[T]) error
 	MoveToBack(node *Node[T]) error
 
-	Find(value T) (*Node[T], error)
-	FindLast(value T) (*Node[T], error)
-
-	RemoveValue(value T) error
 	RemoveNode(node *Node[T]) error
 
 	RemoveFirst() error
@@ -48,13 +44,13 @@ type LinkedList[T comparable] interface {
 	String() string
 }
 
-type linkedList[T comparable] struct {
+type linkedList[T any] struct {
 	head   *Node[T]
 	tail   *Node[T]
 	length int
 }
 
-func New[T comparable]() LinkedList[T] {
+func New[T any]() LinkedList[T] {
 	return &linkedList[T]{}
 }
 
@@ -216,45 +212,6 @@ func (ll *linkedList[T]) MoveToBack(node *Node[T]) error {
 	node.Next = ll.tail.Next
 	ll.tail.Next = node
 	ll.tail = node
-
-	return nil
-}
-
-func (ll *linkedList[T]) Find(value T) (*Node[T], error) {
-	node := ll.head
-
-	for node != nil {
-		if node.Value == value {
-			return node, nil
-		}
-
-		node = node.Next
-	}
-
-	return nil, ErrNodeNotFound
-}
-
-func (ll *linkedList[T]) FindLast(value T) (*Node[T], error) {
-	node := ll.tail
-
-	for node != nil {
-		if node.Value == value {
-			return node, nil
-		}
-
-		node = node.Prev
-	}
-
-	return nil, ErrNodeNotFound
-}
-
-func (ll *linkedList[T]) RemoveValue(value T) error {
-	node, err := ll.Find(value)
-	if err != nil {
-		return err
-	}
-
-	ll.removeNode(node)
 
 	return nil
 }

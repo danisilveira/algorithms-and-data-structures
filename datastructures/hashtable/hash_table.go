@@ -1,32 +1,27 @@
 package hashtable
 
 import (
+	"fmt"
 	"hash/fnv"
 	"sync"
 )
 
-type Key interface {
-	int | int8 | int16 | int32 | int64 |
-		uint | uint8 | uint16 | uint32 | uint64 |
-		string
-}
+type HashGeneratorFunc[K comparable] func(key K) uint64
 
-type HashGeneratorFunc[K Key] func(key K) uint64
-
-type item[K Key, V any] struct {
+type item[K comparable, V any] struct {
 	key   K
 	value V
 	next  *item[K, V]
 }
 
-type HashTable[K Key, V any] struct {
+type HashTable[K comparable, V any] struct {
 	items         []*item[K, V]
 	capacity      uint64
 	hashGenerator HashGeneratorFunc[K]
 	mu            *sync.RWMutex
 }
 
-func New[K Key, V any](capacity uint64, options ...Option[K, V]) *HashTable[K, V] {
+func New[K comparable, V any](capacity uint64, options ...Option[K, V]) *HashTable[K, V] {
 	hashTable := HashTable[K, V]{
 		items:         make([]*item[K, V], capacity, capacity),
 		capacity:      capacity,
@@ -137,42 +132,9 @@ func (h *HashTable[K, V]) Delete(key K) {
 	previousElement.next = currentElement.next
 }
 
-func defaultHashGeneratorFunc[K Key](key K) uint64 {
-	switch k := any(key).(type) {
-	case string:
-		hash := fnv.New32a()
-		hash.Write([]byte(k))
-		return uint64(hash.Sum32())
-	case int:
-		return hash(uint64(k))
-	case int8:
-		return hash(uint64(k))
-	case int16:
-		return hash(uint64(k))
-	case int32:
-		return hash(uint64(k))
-	case int64:
-		return hash(uint64(k))
-	case uint:
-		return hash(uint64(k))
-	case uint8:
-		return hash(uint64(k))
-	case uint16:
-		return hash(uint64(k))
-	case uint32:
-		return hash(uint64(k))
-	case uint64:
-		return hash(uint64(k))
-	default:
-		panic("something went wrong!")
-	}
-}
+func defaultHashGeneratorFunc[K comparable](key K) uint64 {
+	h := fnv.New64a()
+	_, _ = h.Write([]byte(fmt.Sprintf("%v", key)))
 
-func hash(key uint64) uint64 {
-	key ^= key >> 33
-	key *= 0xff51afd7ed558ccd
-	key ^= key >> 33
-	key *= 0xc4ceb9fe1a85ec53
-	key ^= key >> 33
-	return key
+	return h.Sum64()
 }
