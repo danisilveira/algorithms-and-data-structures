@@ -13,9 +13,7 @@ func Sort[T constraints.Ordered](items []T) {
 		}
 
 		if lowest != i {
-			temp := items[i]
-			items[i] = items[lowest]
-			items[lowest] = temp
+			items[i], items[lowest] = items[lowest], items[i]
 		}
 	}
 }

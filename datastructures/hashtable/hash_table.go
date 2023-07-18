@@ -23,7 +23,7 @@ type HashTable[K comparable, V any] struct {
 
 func New[K comparable, V any](capacity uint64, options ...Option[K, V]) *HashTable[K, V] {
 	hashTable := HashTable[K, V]{
-		items:         make([]*item[K, V], capacity, capacity),
+		items:         make([]*item[K, V], capacity),
 		capacity:      capacity,
 		hashGenerator: defaultHashGeneratorFunc[K],
 		mu:            &sync.RWMutex{},
@@ -134,7 +134,7 @@ func (h *HashTable[K, V]) Delete(key K) {
 
 func defaultHashGeneratorFunc[K comparable](key K) uint64 {
 	h := fnv.New64a()
-	_, _ = h.Write([]byte(fmt.Sprintf("%v", key)))
+	_, _ = fmt.Fprintf(h, "%v", key)
 
 	return h.Sum64()
 }

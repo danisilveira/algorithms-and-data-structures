@@ -36,7 +36,7 @@ func (c *cache[K, V]) Get(key K) (V, bool) {
 		return defaultValue, false
 	}
 
-	c.evictionList.MoveToFront(linkedListNode)
+	_ = c.evictionList.MoveToFront(linkedListNode)
 
 	return linkedListNode.Value.value, true
 }
@@ -44,14 +44,14 @@ func (c *cache[K, V]) Get(key K) (V, bool) {
 func (c *cache[K, V]) Set(key K, value V) bool {
 	if linkedListNode, ok := c.storage.Get(key); ok {
 		linkedListNode.Value.value = value
-		c.evictionList.MoveToFront(linkedListNode)
+		_ = c.evictionList.MoveToFront(linkedListNode)
 		return false
 	}
 
 	evict := c.shouldEvict()
 	if evict {
 		linkedListNode := c.evictionList.BackNode()
-		c.evictionList.RemoveLast()
+		_ = c.evictionList.RemoveLast()
 		c.storage.Delete(linkedListNode.Value.key)
 	}
 
@@ -59,7 +59,7 @@ func (c *cache[K, V]) Set(key K, value V) bool {
 		key:   key,
 		value: value,
 	})
-	c.evictionList.AddNodeFirst(linkedListNode)
+	_ = c.evictionList.AddNodeFirst(linkedListNode)
 	c.storage.Set(key, linkedListNode)
 
 	return evict

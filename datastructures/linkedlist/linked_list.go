@@ -56,7 +56,7 @@ func New[T any]() LinkedList[T] {
 
 func (ll *linkedList[T]) AddValueFirst(value T) *Node[T] {
 	newNode := NewNode(value)
-	ll.AddNodeFirst(newNode)
+	_ = ll.AddNodeFirst(newNode)
 
 	return newNode
 }
@@ -80,7 +80,7 @@ func (ll *linkedList[T]) AddNodeFirst(newNode *Node[T]) error {
 
 func (ll *linkedList[T]) AddValueLast(value T) *Node[T] {
 	newNode := NewNode(value)
-	ll.AddNodeLast(newNode)
+	_ = ll.AddNodeLast(newNode)
 
 	return newNode
 }
@@ -104,7 +104,7 @@ func (ll *linkedList[T]) AddNodeLast(newNode *Node[T]) error {
 
 func (ll *linkedList[T]) AddValueAfter(node *Node[T], value T) *Node[T] {
 	newNode := NewNode(value)
-	ll.AddNodeAfter(node, newNode)
+	_ = ll.AddNodeAfter(node, newNode)
 
 	return newNode
 }
@@ -131,7 +131,7 @@ func (ll *linkedList[T]) AddNodeAfter(node, newNode *Node[T]) error {
 
 func (ll *linkedList[T]) AddValueBefore(node *Node[T], value T) *Node[T] {
 	newNode := NewNode(value)
-	ll.AddNodeBefore(node, newNode)
+	_ = ll.AddNodeBefore(node, newNode)
 
 	return newNode
 }

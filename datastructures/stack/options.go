@@ -1,5 +1,7 @@
 package stack
 
+var basePercentage float64 = 100
+
 type Option[T any] func(stack *stack[T])
 
 func WithCapacity[T any](capacity int) Option[T] {
@@ -10,7 +12,7 @@ func WithCapacity[T any](capacity int) Option[T] {
 
 func WithGrowFactor[T any](growFactor float64) Option[T] {
 	return func(stack *stack[T]) {
-		stack.growFactor = int(growFactor * 100)
+		stack.growFactor = int(growFactor * basePercentage)
 	}
 }
 

@@ -8,66 +8,66 @@ import (
 )
 
 func TestStack(t *testing.T) {
-	stack := stack.MustNew[int]()
-	assert.True(t, stack.Empty())
-	assert.Equal(t, 0, stack.Len())
-	assert.Equal(t, 10, stack.Cap())
+	st := stack.MustNew[int]()
+	assert.True(t, st.Empty())
+	assert.Equal(t, 0, st.Len())
+	assert.Equal(t, 10, st.Cap())
 
-	assert.False(t, stack.IsSynchronized())
-	stack = stack.Synchronized()
-	assert.True(t, stack.IsSynchronized())
+	assert.False(t, st.IsSynchronized())
+	st = st.Synchronized()
+	assert.True(t, st.IsSynchronized())
 
-	assert.Nil(t, stack.Push(1))
+	assert.Nil(t, st.Push(1))
 
-	top, err := stack.Peek()
+	top, err := st.Peek()
 	assert.Equal(t, 1, top)
 	assert.Nil(t, err)
-	assert.Equal(t, 1, stack.Len())
+	assert.Equal(t, 1, st.Len())
 
-	one, err := stack.Pop()
+	one, err := st.Pop()
 	assert.Equal(t, 1, one)
 	assert.Nil(t, err)
-	assert.Equal(t, 0, stack.Len())
+	assert.Equal(t, 0, st.Len())
 
-	assert.Nil(t, stack.Push(2))
-	assert.Nil(t, stack.Push(3))
+	assert.Nil(t, st.Push(2))
+	assert.Nil(t, st.Push(3))
 
-	top, err = stack.Peek()
+	top, err = st.Peek()
 	assert.Equal(t, 3, top)
 	assert.Nil(t, err)
 
-	assert.Equal(t, 2, stack.Len())
+	assert.Equal(t, 2, st.Len())
 
-	three, err := stack.Pop()
+	three, err := st.Pop()
 	assert.Equal(t, 3, three)
 	assert.Nil(t, err)
 
-	two, err := stack.Pop()
+	two, err := st.Pop()
 	assert.Equal(t, 2, two)
 	assert.Nil(t, err)
 
-	assert.True(t, stack.Empty())
-	assert.Equal(t, 0, stack.Len())
+	assert.True(t, st.Empty())
+	assert.Equal(t, 0, st.Len())
 }
 
 func TestStack_ShouldBeAbleToIncreaseItsCapacity(t *testing.T) {
-	s := stack.MustNew(stack.WithCapacity[int](1))
-	assert.Nil(t, s.Push(1))
+	st := stack.MustNew(stack.WithCapacity[int](1))
+	assert.Nil(t, st.Push(1))
 
-	assert.True(t, s.Full())
+	assert.True(t, st.Full())
 
-	assert.Nil(t, s.Push(2))
+	assert.Nil(t, st.Push(2))
 
-	assert.Equal(t, 2, s.Len())
-	assert.Equal(t, 5, s.Cap())
+	assert.Equal(t, 2, st.Len())
+	assert.Equal(t, 5, st.Cap())
 }
 
 func TestStack_ShouldReturnAnErrorWhenAnItemIsPoppedFromAnEmptyStack(t *testing.T) {
-	s := stack.MustNew[int]()
+	st := stack.MustNew[int]()
 
-	assert.True(t, s.Empty())
+	assert.True(t, st.Empty())
 
-	_, err := s.Pop()
+	_, err := st.Pop()
 
 	assert.Error(t, err)
 	assert.ErrorIs(t, err, stack.ErrStackIsEmpty)

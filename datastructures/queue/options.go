@@ -1,5 +1,7 @@
 package queue
 
+var basePercentage float64 = 100
+
 type Option[T any] func(queue *queue[T])
 
 func WithCapacity[T any](capacity int) Option[T] {
@@ -10,7 +12,7 @@ func WithCapacity[T any](capacity int) Option[T] {
 
 func WithGrowFactor[T any](growFactor float64) Option[T] {
 	return func(queue *queue[T]) {
-		queue.growFactor = int(growFactor * 100)
+		queue.growFactor = int(growFactor * basePercentage)
 	}
 }
 
