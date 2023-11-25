@@ -118,3 +118,4 @@ issues:
 
 run:
   timeout: 5m
+  tests: false

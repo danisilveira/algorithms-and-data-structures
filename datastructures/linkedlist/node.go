@@ -4,8 +4,6 @@ type Node[T any] struct {
 	Next  *Node[T]
 	Prev  *Node[T]
 	Value T
-
-	list LinkedList[T]
 }
 
 func NewNode[T any](value T) *Node[T] {
