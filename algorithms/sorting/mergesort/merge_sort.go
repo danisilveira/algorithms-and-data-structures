@@ -1,8 +1,8 @@
 package mergesort
 
-import "golang.org/x/exp/constraints"
+import "cmp"
 
-func Sort[T constraints.Ordered](items []T) []T {
+func Sort[T cmp.Ordered](items []T) []T {
 	if len(items) == 1 {
 		return items
 	}
@@ -13,7 +13,7 @@ func Sort[T constraints.Ordered](items []T) []T {
 	return merge(firstHalf, secondHalf)
 }
 
-func merge[T constraints.Ordered](firstHalf, secondHalf []T) []T {
+func merge[T cmp.Ordered](firstHalf, secondHalf []T) []T {
 	items := []T{}
 
 	firstHalfIndex := 0

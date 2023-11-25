@@ -1,8 +1,8 @@
 package selectionsort
 
-import "golang.org/x/exp/constraints"
+import "cmp"
 
-func Sort[T constraints.Ordered](items []T) {
+func Sort[T cmp.Ordered](items []T) {
 	for i := 0; i < len(items)-1; i++ {
 		lowest := i
 

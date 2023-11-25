@@ -1,13 +1,13 @@
 package inversions
 
-import "golang.org/x/exp/constraints"
+import "cmp"
 
-func Count[T constraints.Ordered](items []T) int {
+func Count[S ~[]T, T cmp.Ordered](items S) int {
 	_, count := sortAndCountInversions(items)
 	return count
 }
 
-func sortAndCountInversions[T constraints.Ordered](items []T) (orderedItems []T, inversionsCount int) {
+func sortAndCountInversions[S ~[]T, T cmp.Ordered](items S) (orderedItems S, inversionsCount int) {
 	if len(items) <= 1 {
 		return items, 0
 	}
@@ -19,7 +19,7 @@ func sortAndCountInversions[T constraints.Ordered](items []T) (orderedItems []T,
 	return merged, (leftInversions + rightInversions + splitInversions)
 }
 
-func mergeAndCountSplitInversions[T constraints.Ordered](firstHalf, secondHalf []T) (orderedItems []T, inversionsCount int) {
+func mergeAndCountSplitInversions[S ~[]T, T cmp.Ordered](firstHalf, secondHalf S) (orderedItems S, inversionsCount int) {
 	items := []T{}
 	splitInversions := 0
 

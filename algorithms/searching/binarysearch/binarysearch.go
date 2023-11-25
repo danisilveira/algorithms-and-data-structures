@@ -1,10 +1,10 @@
 package binarysearch
 
 import (
-	"golang.org/x/exp/constraints"
+	"cmp"
 )
 
-func Search[T constraints.Ordered](items []T, search T) (index, steps int) {
+func Search[S ~[]T, T cmp.Ordered](items S, search T) (index, steps int) {
 	if len(items) == 0 {
 		steps++
 		return -1, steps

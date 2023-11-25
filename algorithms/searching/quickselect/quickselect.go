@@ -1,12 +1,12 @@
 package quickselect
 
-import "golang.org/x/exp/constraints"
+import "cmp"
 
-func Select[T constraints.Ordered](items []T, kthLowestValue int) T {
+func Select[S ~[]T, T cmp.Ordered](items S, kthLowestValue int) T {
 	return qselect(items, kthLowestValue-1, 0, len(items)-1)
 }
 
-func qselect[T constraints.Ordered](items []T, kthLowestValue, leftPointer, rightPointer int) T {
+func qselect[S ~[]T, T cmp.Ordered](items S, kthLowestValue, leftPointer, rightPointer int) T {
 	if rightPointer-leftPointer <= 0 {
 		return items[leftPointer]
 	}
@@ -24,7 +24,7 @@ func qselect[T constraints.Ordered](items []T, kthLowestValue, leftPointer, righ
 	return items[pivotIndex]
 }
 
-func partition[T constraints.Ordered](items []T, leftPointer, rightPointer int) int {
+func partition[S ~[]T, T cmp.Ordered](items S, leftPointer, rightPointer int) int {
 	pivot := items[rightPointer]
 
 	for currentPointer := leftPointer; currentPointer < rightPointer; currentPointer++ {

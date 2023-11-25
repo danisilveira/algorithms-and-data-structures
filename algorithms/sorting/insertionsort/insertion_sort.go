@@ -1,8 +1,8 @@
 package insertionsort
 
-import "golang.org/x/exp/constraints"
+import "cmp"
 
-func Sort[T constraints.Ordered](items []T) {
+func Sort[T cmp.Ordered](items []T) {
 	for i := 1; i < len(items); i++ {
 		tempValue := items[i]
 		position := i - 1

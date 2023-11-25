@@ -1,8 +1,8 @@
 package bubblesort
 
-import "golang.org/x/exp/constraints"
+import "cmp"
 
-func Sort[T constraints.Ordered](items []T) {
+func Sort[T cmp.Ordered](items []T) {
 	sorted := false
 
 	unsortedUntilIndex := len(items) - 1

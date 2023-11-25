@@ -1,12 +1,12 @@
 package quicksort
 
-import "golang.org/x/exp/constraints"
+import "cmp"
 
-func Sort[T constraints.Ordered](items []T) {
+func Sort[T cmp.Ordered](items []T) {
 	sort(items, 0, len(items)-1)
 }
 
-func sort[T constraints.Ordered](items []T, leftPointer, rightPointer int) {
+func sort[T cmp.Ordered](items []T, leftPointer, rightPointer int) {
 	if rightPointer-leftPointer <= 0 {
 		return
 	}
@@ -17,7 +17,7 @@ func sort[T constraints.Ordered](items []T, leftPointer, rightPointer int) {
 	sort(items, pivotPointer+1, rightPointer)
 }
 
-func partition[T constraints.Ordered](items []T, leftPointer, rightPointer int) int {
+func partition[T cmp.Ordered](items []T, leftPointer, rightPointer int) int {
 	pivot := items[rightPointer]
 
 	for currentPointer := leftPointer; currentPointer < rightPointer; currentPointer++ {
