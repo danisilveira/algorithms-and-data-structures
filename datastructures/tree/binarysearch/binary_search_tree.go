@@ -46,7 +46,7 @@ func (t *Tree[T]) AddNode(node *TreeNode[T]) {
 	}
 }
 
-func (t *Tree[T]) Left(node *TreeNode[T]) *TreeNode[T] {
+func (t *Tree[T]) LeftmostLeaf(node *TreeNode[T]) *TreeNode[T] {
 	if node == nil {
 		return nil
 	}
@@ -58,7 +58,7 @@ func (t *Tree[T]) Left(node *TreeNode[T]) *TreeNode[T] {
 	return node
 }
 
-func (t *Tree[T]) Right(node *TreeNode[T]) *TreeNode[T] {
+func (t *Tree[T]) RightmostLeaf(node *TreeNode[T]) *TreeNode[T] {
 	if node == nil {
 		return nil
 	}

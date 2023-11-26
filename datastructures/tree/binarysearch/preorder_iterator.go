@@ -12,7 +12,7 @@ type preorderIterator[T cmp.Ordered] struct {
 func NewPreOrderIterator[T cmp.Ordered](tree *Tree[T]) TreeIterator[T] {
 	return &preorderIterator[T]{
 		tree:     tree,
-		lastNode: tree.Right(tree.root),
+		lastNode: tree.RightmostLeaf(tree.root),
 	}
 }
 

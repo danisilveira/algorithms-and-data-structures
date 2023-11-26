@@ -20,7 +20,7 @@ func (i *postOrderIterator[T]) HasNext() bool {
 	}
 
 	if i.node == nil {
-		i.node = i.tree.Left(i.tree.root)
+		i.node = i.tree.LeftmostLeaf(i.tree.root)
 		return i.node != nil
 	}
 
@@ -29,7 +29,7 @@ func (i *postOrderIterator[T]) HasNext() bool {
 		i.node = i.node.Parent
 
 		if i.node.Right != nil && node != i.node.Right {
-			i.node = i.tree.Left(i.node.Right)
+			i.node = i.tree.LeftmostLeaf(i.node.Right)
 			return true
 		}
 
