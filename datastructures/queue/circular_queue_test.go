@@ -46,45 +46,38 @@ func TestQueue(t *testing.T) {
 		assert.Equal(t, 0, q.Len())
 	})
 
-	t.Run("it should be able to increase its capacity with the minimum grow", func(t *testing.T) {
+	t.Run("it should be circular", func(t *testing.T) {
 		q := queue.MustNewCircular(
-			queue.CircularWithCapacity[rune](1),
-			queue.CircularWithMinimumGrow[rune](2),
+			queue.CircularWithCapacity[int](3),
 		)
 
-		assert.True(t, q.Empty())
+		q.Enqueue(1)
+		q.Enqueue(2)
+		q.Enqueue(3)
 
-		q.Enqueue('a')
-		assert.True(t, q.Full())
-		assert.Equal(t, 1, q.Cap())
-
-		q.Enqueue('b')
-		assert.False(t, q.Full())
-		assert.Equal(t, 2, q.Len())
-
+		assert.Equal(t, 3, q.Len())
 		assert.Equal(t, 3, q.Cap())
-	})
-
-	t.Run("it should be able to increase its capacity with the grow factor", func(t *testing.T) {
-		q := queue.MustNewCircular(
-			queue.CircularWithGrowFactor[rune](5),
-			queue.CircularWithCapacity[rune](4),
-		)
-
-		assert.True(t, q.Empty())
-
-		q.Enqueue('a')
-		q.Enqueue('b')
-		q.Enqueue('c')
-		q.Enqueue('d')
 		assert.True(t, q.Full())
-		assert.Equal(t, 4, q.Len())
-		assert.Equal(t, 4, q.Cap())
 
-		q.Enqueue('d')
-		assert.False(t, q.Full())
-		assert.Equal(t, 5, q.Len())
-		assert.Equal(t, 20, q.Cap())
+		q.Enqueue(4)
+		q.Enqueue(5)
+		q.Enqueue(6)
+
+		assert.Equal(t, 3, q.Len())
+		assert.Equal(t, 3, q.Cap())
+		assert.True(t, q.Full())
+
+		four, err := q.Dequeue()
+		assert.NoError(t, err)
+		assert.Equal(t, 4, four)
+
+		five, err := q.Dequeue()
+		assert.NoError(t, err)
+		assert.Equal(t, 5, five)
+
+		six, err := q.Dequeue()
+		assert.NoError(t, err)
+		assert.Equal(t, 6, six)
 	})
 
 	t.Run("it should return an error when an item is dequeued from an empty queue", func(t *testing.T) {

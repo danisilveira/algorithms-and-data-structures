@@ -6,16 +6,11 @@ type Circular[T any] struct {
 	tail     int
 	length   int
 	capacity int
-
-	minimumGrow int
-	growFactor  int
 }
 
 func NewCircular[T any](options ...CircularOption[T]) (*Circular[T], error) {
 	queue := &Circular[T]{
-		capacity:    32,
-		growFactor:  2,
-		minimumGrow: 4,
+		capacity: 32,
 	}
 
 	for _, option := range options {
@@ -23,14 +18,6 @@ func NewCircular[T any](options ...CircularOption[T]) (*Circular[T], error) {
 	}
 
 	queue.items = make([]T, queue.capacity)
-
-	if queue.capacity < 0 {
-		return nil, ErrQueueCapacityNegative
-	}
-
-	if queue.growFactor < 2 || queue.growFactor > 100 {
-		return nil, ErrQueueInvalidGrowFactor
-	}
 
 	return queue, nil
 }
@@ -46,12 +33,7 @@ func MustNewCircular[T any](options ...CircularOption[T]) *Circular[T] {
 
 func (q *Circular[T]) Enqueue(value T) {
 	if q.Full() {
-		newCapacity := q.capacity * q.growFactor
-		if newCapacity < (q.capacity + q.minimumGrow) {
-			newCapacity = q.capacity + q.minimumGrow
-		}
-
-		q.setCapacity(newCapacity)
+		_, _ = q.Dequeue()
 	}
 
 	q.items[q.tail] = value
@@ -98,27 +80,6 @@ func (q *Circular[T]) Full() bool {
 
 func (q *Circular[T]) Empty() bool {
 	return q.length == 0
-}
-
-func (q *Circular[T]) setCapacity(capacity int) {
-	newItems := make([]T, capacity)
-	if q.length > 0 {
-		if q.head < q.tail {
-			copy(newItems, q.items)
-		} else {
-			copy(newItems, q.items[q.head:])
-			copy(newItems[q.head+1:], q.items[:q.tail])
-		}
-	}
-
-	q.items = newItems
-	q.capacity = capacity
-	q.head = 0
-	if q.length == capacity {
-		q.tail = 0
-	} else {
-		q.tail = q.length
-	}
 }
 
 func (q *Circular[T]) next(index int) int {
