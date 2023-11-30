@@ -1,6 +1,10 @@
 package binarysearch
 
-import "cmp"
+import (
+	"cmp"
+	"fmt"
+	"strings"
+)
 
 type preorderIterator[T cmp.Ordered] struct {
 	tree     *Tree[T]
@@ -52,6 +56,19 @@ func (i *preorderIterator[T]) HasNext() bool {
 
 func (i *preorderIterator[T]) Value() T {
 	return i.node.Value
+}
+
+func (i *preorderIterator[T]) String() string {
+	var builder strings.Builder
+
+	i.Reset()
+
+	for i.HasNext() {
+		value := i.Value()
+		builder.WriteString(fmt.Sprintf("%v ", value))
+	}
+
+	return strings.TrimSpace(builder.String())
 }
 
 func (i *preorderIterator[T]) Reset() {

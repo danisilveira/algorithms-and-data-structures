@@ -1,43 +1,31 @@
 package binarysearch_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/danisilveira/algorithms-and-data-structures/datastructures/tree/binarysearch"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBinarySearchTree(t *testing.T) {
-	t.Run("test", func(t *testing.T) {
-		tr := binarysearch.NewTree[int]()
-		tr.AddValue(50)
-		tr.AddValue(25)
-		tr.AddValue(75)
-		tr.AddValue(20)
-		tr.AddValue(30)
-		tr.AddValue(70)
-		tr.AddValue(80)
-		tr.AddValue(27)
+	tr := binarysearch.NewTree[int]()
+	tr.Insert(48)
+	tr.Insert(10)
+	tr.Insert(87)
+	tr.Insert(74)
+	tr.Insert(47)
+	tr.Insert(1)
+	tr.Insert(31)
+	tr.Insert(32)
 
-		it := tr.InOrder()
-		for it.HasNext() {
-			fmt.Println(it.Value())
-		}
+	assert.Equal(t, "1 10 31 32 47 48 74 87", tr.InOrder().String())
 
-		fmt.Println()
+	tr.Delete(10)
+	assert.Equal(t, "1 31 32 47 48 74 87", tr.InOrder().String())
 
-		it = tr.PreOrder()
-		for it.HasNext() {
-			fmt.Println(it.Value())
-		}
+	tr.Delete(87)
+	assert.Equal(t, "1 31 32 47 48 74", tr.InOrder().String())
 
-		fmt.Println()
-
-		it = tr.PostOrder()
-		for it.HasNext() {
-			fmt.Println(it.Value())
-		}
-
-		t.Fail()
-	})
+	tr.Delete(48)
+	assert.Equal(t, "1 31 32 47 74", tr.InOrder().String())
 }

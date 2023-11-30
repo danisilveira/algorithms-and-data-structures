@@ -12,12 +12,31 @@ func NewTree[T cmp.Ordered]() *Tree[T] {
 	return &Tree[T]{}
 }
 
-func (t *Tree[T]) AddValue(value T) {
-	node := NewBinaryNode(value)
-	t.AddNode(node)
+func (t *Tree[T]) Get(value T) (*TreeNode[T], bool) {
+	currentNode := t.root
+
+	for currentNode != nil {
+		if value == currentNode.Value {
+			break
+		}
+
+		if value > currentNode.Value {
+			currentNode = currentNode.Right
+			continue
+		}
+
+		currentNode = currentNode.Left
+	}
+
+	return currentNode, currentNode != nil
 }
 
-func (t *Tree[T]) AddNode(node *TreeNode[T]) {
+func (t *Tree[T]) Insert(value T) {
+	node := NewBinaryNode(value)
+	t.InsertNode(node)
+}
+
+func (t *Tree[T]) InsertNode(node *TreeNode[T]) {
 	if t.root == nil {
 		t.root = node
 		return
@@ -44,6 +63,81 @@ func (t *Tree[T]) AddNode(node *TreeNode[T]) {
 
 		currentNode = currentNode.Left
 	}
+}
+
+func (t *Tree[T]) Delete(value T) {
+	node, ok := t.Get(value)
+	if !ok {
+		return
+	}
+
+	if node.Left == nil {
+		if node.Parent == nil {
+			t.root = node.Right
+			node.Parent = nil
+
+			return
+		}
+
+		if node.Parent.Left == node {
+			node.Parent.Left = node.Right
+		} else {
+			node.Parent.Right = node.Right
+		}
+
+		if node.Right != nil {
+			node.Right.Parent = node.Parent
+		}
+
+		return
+	}
+
+	if node.Right == nil {
+		if node.Parent == nil {
+			t.root = node.Left
+			node.Parent = nil
+
+			return
+		}
+
+		if node.Parent.Left == node {
+			node.Parent.Left = node.Left
+		} else {
+			node.Parent.Right = node.Left
+		}
+
+		node.Left.Parent = node.Parent
+
+		return
+	}
+
+	nextInOrder := t.LeftmostLeaf(node.Right)
+	if nextInOrder.Parent != node {
+		if nextInOrder.Parent.Left == nextInOrder {
+			nextInOrder.Parent.Left = nextInOrder.Right
+		} else {
+			nextInOrder.Parent.Right = nextInOrder.Right
+		}
+
+		if nextInOrder.Right != nil {
+			nextInOrder.Right.Parent = nextInOrder.Parent
+		}
+
+		node.Right.Parent = nextInOrder
+		nextInOrder.Right = node.Right
+	}
+
+	if node.Parent == nil {
+		t.root = nextInOrder
+	} else if node.Parent.Left == node {
+		node.Parent.Left = nextInOrder
+	} else {
+		node.Parent.Right = nextInOrder
+	}
+
+	nextInOrder.Parent = node.Parent
+	nextInOrder.Left = node.Left
+	nextInOrder.Left.Parent = nextInOrder
 }
 
 func (t *Tree[T]) LeftmostLeaf(node *TreeNode[T]) *TreeNode[T] {
